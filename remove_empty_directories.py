@@ -16,7 +16,7 @@ NT_CACHE_FILES = {
 }
 
 def _listdir(path: str):
-    return [(name, os.path.join(path, name))for name in os.listdir(path)]
+    return [(name, os.path.join(path, name)) for name in os.listdir(path)]
 
 def _try_remove_file(path: str):
     with suppress(PermissionError):
@@ -32,7 +32,10 @@ def try_remove_empty_directory(root: str, include_self: bool):
     '''
 
     with suppress(PermissionError): # raise when call os.listdir(...)
-        items = _listdir(root)
+        try:
+            items = _listdir(root)
+        except FileNotFoundError:
+            return True
 
         if sum(int(not try_remove_empty_directory(x[1], True)) for x in items if os.path.isdir(x[1])):
             return False
