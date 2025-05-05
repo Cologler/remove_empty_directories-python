@@ -64,8 +64,18 @@ def main(argv=None):
         argv = sys.argv
 
     args = argv[1:]
-    if args:
+
+    if not args or args[0].lower() in ('--help', '-h', '-?'):
+        # print help
+        print('usage: %s <directory>' % argv[0])
+
+    elif len(args) > 1:
+        # print error
+        print('error: too many arguments.')
+        return 1
+
+    else:
         try_remove_empty_directory(args[0], False)
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main(sys.argv))
